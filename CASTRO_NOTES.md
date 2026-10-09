@@ -79,7 +79,7 @@ make COMP=gnu USE_MPI=TRUE -j8      # second pass links the exe
   point-mass gravity aggravates), tripping `enforce_min_density`. The default
   `inputs` therefore ships with the sink **off**. Options to finish it:
   (a) measure the accretion rate as the mass flux through a control surface at
-  ~Rs instead of an absorbing sink (needs no sink at all); or
+  Rs instead of an absorbing sink (needs no sink at all); or
   (b) a softened-gravity + floor-relaxation sink that keeps density strictly
   positive throughout the strong-gravity region; or
   (c) Blondin & Pope's inner-boundary + steady-state-relaxation approach.
