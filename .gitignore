@@ -1,0 +1,15 @@
+# build products
+tmp_build_dir/
+*.ex
+*.o
+
+# simulation output (large; regenerate by running the code)
+plt*/
+chk*/
+*.out
+
+# run / build logs
+*.log
+
+# macOS
+.DS_Store

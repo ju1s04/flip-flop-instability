@@ -1,0 +1,38 @@
+# Bondi-Hoyle-Lyttleton accretion -- Blondin & Pope (2009) replication
+#
+# name              type      default              in_inputs   [size]
+
+# inputs (dimensionless: choose GM, rho_inf, v_inf so that Ra = 2GM/v_inf^2)
+GM                  real      0.5_rt               y
+rho_inf             real      1.0_rt               y
+v_inf               real      1.0_rt               y
+mach                real      4.0_rt               y
+
+# ratio of specific heats 
+gamma_gas           real      1.3333333333_rt      y
+
+# accretor (sink) radius as a fraction of the accretion radius Ra
+Rs_frac             real      0.25_rt              y
+
+# gravitational softening length as a fraction of Rs (eps = soft_frac * Rs)
+soft_frac           real      0.6_rt               y
+
+# accretion (drain) timescale for the sink
+tau_sink            real      0.02_rt              y
+
+# floor density the sink relaxes toward (fraction of rho_inf); keeps the
+# absorbed region low-density but strictly positive 
+rho_sink_frac       real      1.e-3_rt             y
+
+# radius (in code units, accretion radii) within which to AMR-refine
+refine_radius       real      2.0_rt               y
+
+# set in problem_initialize.H; not read from inputs)
+c_inf               real      0.0_rt               n
+p_inf               real      0.0_rt               n
+rhoe_inf            real      0.0_rt               n
+T_inf               real      0.0_rt               n
+Ra                  real      0.0_rt               n
+Rs                  real      0.0_rt               n
+eps                 real      0.0_rt               n
+xn                  real      0.0_rt               n           nspec

@@ -1,0 +1,119 @@
+# ============================================================================
+#  Bondi-Hoyle-Lyttleton accretion  --  replication of Blondin & Pope (2009)
+#
+#  Dimensionless units: rho_inf = 1, v_inf = 1, Ra = 2 GM / v_inf^2 = 1
+#  (so GM = 0.5).  Mach = 4  =>  c_inf = 0.25.  Time is in units of Ra/v_inf.
+#
+#  This default sets up the cheap UNIFORM-GRID smoke test with a large sink
+#  (Rs = 0.25 Ra) for the Level-1 steady-rate check.  For the Blondin & Pope
+#  model-A flip-flop run (Rs = 0.037 Ra) switch on the AMR block at the bottom.
+# ============================================================================
+
+max_step  = 1000000
+stop_time = 40.0
+
+# ---- geometry: accretor sits at the domain center, wind blows in +x ----
+geometry.is_periodic = 0 0
+geometry.coord_sys   = 0            # 0 => Cartesian
+geometry.prob_lo     = -6.0  -8.0
+geometry.prob_hi     = 18.0   8.0
+amr.n_cell           = 768   512
+
+# ---- boundary conditions ----
+# 0=Interior 1=Inflow 2=Outflow 3=Symmetry 4=SlipWall 5=NoSlipWall
+castro.lo_bc = 1 2      # xlo = wind inflow, ylo = outflow
+castro.hi_bc = 2 2      # xhi = outflow,     yhi = outflow
+
+# ---- physics ----
+castro.do_hydro    = 1
+# add_ext_src enables the accretion sink (problem_source.H).  VERIFIED STABLE
+# with the sink OFF (native gravity + AMR).  The absorbing sink still drives
+# near-accretor cells to exactly-zero density -- WIP; see README.  Set to 1 to
+# experiment with the sink, 0 for the stable flow.
+castro.add_ext_src = 0
+
+castro.ppm_type       = 1
+castro.riemann_solver = 0          # 0 = CGF
+
+# ---- gravity: native point-mass (mirrors hydro_tests/rotating_torus) ----
+# g = -Gconst * point_mass / r^2, with Gconst = 6.67428e-8.  point_mass is set
+# so that G*M = problem.GM = 0.5  =>  point_mass = 0.5 / 6.67428e-8 = 7.49143e6.
+castro.do_grav                 = 1
+gravity.gravity_type           = ConstantGrav
+gravity.const_grav             = 0.0
+castro.use_point_mass          = 1
+castro.point_mass              = 7.49143e6
+castro.point_mass_fix_solution = 0
+
+# robustness for the strong point-mass infall + absorbing sink
+castro.use_retry                  = 1   # retry a step with smaller dt on a failure
+castro.limit_fluxes_on_small_dens = 1   # stop hydro fluxes driving cells negative
+
+# ---- EOS (eos_gamma MUST match problem.gamma_gas below) ----
+eos.eos_gamma          = 1.3333333333
+eos.eos_assume_neutral = 1
+
+# ---- floors ----
+# This is a dimensionless gamma-law setup, so the *physical* temperature the
+# EOS derives is tiny (~1e-10); small_temp must sit well below it.  small_dens
+# also enforces the "absorbing" (near-vacuum) state inside the sink.
+castro.small_dens = 1.e-10
+castro.small_pres = 1.e-16
+castro.small_temp = 1.e-20
+
+# Single passive species: the sharp sink can transiently perturb X near the
+# accretor; disable the strict abundance abort so normalize_species simply
+# renormalizes X -> 1 (which is always correct here).
+castro.abundance_failure_rho_cutoff = 1.e30
+
+# ---- problem parameters ----
+problem.GM        = 0.5
+problem.rho_inf   = 1.0
+problem.v_inf     = 1.0
+problem.mach      = 4.0
+problem.gamma_gas = 1.3333333333
+problem.Rs_frac      = 0.25        # Rs / Ra   (use 0.037 for model A)
+problem.tau_sink     = 0.3         # sink drain timescale (smaller => more absorbing)
+problem.refine_radius = 2.0        # AMR-refine within this radius of the accretor
+
+# ---- time stepping ----
+castro.cfl         = 0.5
+castro.init_shrink = 0.1
+castro.change_max  = 1.1
+
+# ---- diagnostics / verbosity ----
+castro.sum_interval = 10           # prints total mass on the grid each 10 steps
+castro.v            = 1
+amr.v               = 1
+
+# ---- refinement: problem_tagging.H refines a region around the accretor ----
+amr.max_level       = 2         # 0 for a uniform run; >0 refines the accretor
+amr.ref_ratio       = 2 2 2 2
+amr.regrid_int      = 2
+amr.blocking_factor = 8
+amr.max_grid_size   = 128
+amr.n_error_buf     = 2 2 2 2
+
+# ---- I/O ----
+amr.check_file       = chk
+amr.check_int        = 2000
+amr.plot_file        = plt
+amr.plot_int         = 200
+amr.derive_plot_vars = density xmom ymom zmom eden Temp pressure
+
+# ============================================================================
+#  PRODUCTION (Blondin & Pope model A: Rs = 0.037 Ra, flip-flop instability)
+#  Uncomment and tune.  The sink MUST stay on the finest level, so combine a
+#  density-gradient indicator with a fixed refinement region at the accretor.
+# ----------------------------------------------------------------------------
+# problem.Rs_frac = 0.037
+# amr.max_level   = 3
+# amr.refinement_indicators = dengrad sinkbox
+# amr.refine.dengrad.field_name    = density
+# amr.refine.dengrad.gradient      = 0.05
+# amr.refine.dengrad.max_level     = 3
+# # fixed high-res box around the accretor (centered at (6,0) for this domain):
+# amr.refine.sinkbox.max_level      = 3
+# amr.refine.sinkbox.in_box_lo      =  5.0  -1.0
+# amr.refine.sinkbox.in_box_hi      =  7.0   1.0
+# ============================================================================
