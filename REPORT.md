@@ -176,9 +176,9 @@ Peak density reaches ~30–77× ambient at the accretor (the pile-up is expected
 because the sink is off, nothing removes the accreted gas).
 
 **Figures**
-- `bhl_density.png` — uniform-grid time series (`t = 0.19, 0.60, 1.20, 1.63`).
-- `bhl_amr.png` — full domain + zoom with AMR grid boxes (levels 0/1/2).
-- `bhl_zoom.png` — 2×2 Ra close-up at the finest level with velocity streamlines,
+- `bhl_density.png`: uniform-grid time series (`t = 0.19, 0.60, 1.20, 1.63`).
+- `bhl_amr.png`: full domain + zoom with AMR grid boxes (levels 0/1/2).
+- `bhl_zoom.png`: 2×2 Ra close-up at the finest level with velocity streamlines,
   showing the bow shock and the flip-flop vortex.
 
 ---
