@@ -99,7 +99,7 @@ source was modified**. Files:
 | `problem_initialize.H` | sets `problem::center` to the domain centre; derives `Ra`, `Rs`, `c∞`, `p∞`, `ρe∞`, `T∞` |
 | `problem_initialize_state_data.H` | **initial condition**: uniform Mach-4 wind everywhere |
 | `problem_bc_fill.H` | **custom inflow BC**: imposes the uniform wind on the XLO face |
-| `problem_source.H` | the **absorbing sink** (floor-relaxation drain inside `Rs`) — *currently disabled* |
+| `problem_source.H` | the **absorbing sink** (floor-relaxation drain inside `Rs`) *currently disabled* |
 | `problem_tagging.H` | **AMR tagging**: nested, distance-based refinement around the accretor |
 | `inputs` | full runtime configuration |
 | `plot_bhl.py`, `plot_amr.py`, `plot_zoom.py` | yt/matplotlib post-processing |
