@@ -1,5 +1,5 @@
 # ============================================================================
-#  Bondi-Hoyle-Lyttleton accretion  --  replication of Blondin & Pope (2009)
+#  Bondi-Hoyle-Lyttleton accretion replication of Blondin & Pope (2009)
 #
 #  Dimensionless units: rho_inf = 1, v_inf = 1, Ra = 2 GM / v_inf^2 = 1
 #  (so GM = 0.5).  Mach = 4  =>  c_inf = 0.25.  Time is in units of Ra/v_inf.
@@ -26,9 +26,9 @@ castro.hi_bc = 2 2      # xhi = outflow,     yhi = outflow
 
 # ---- physics ----
 castro.do_hydro    = 1
-# add_ext_src enables the accretion sink (problem_source.H).  VERIFIED STABLE
+# add_ext_src enables the accretion sink (problem_source.H).  
 # with the sink OFF (native gravity + AMR).  The absorbing sink still drives
-# near-accretor cells to exactly-zero density -- WIP; see README.  Set to 1 to
+# near-accretor cells to exactly-zero density. Set to 1 to
 # experiment with the sink, 0 for the stable flow.
 castro.add_ext_src = 0
 
@@ -45,25 +45,16 @@ castro.use_point_mass          = 1
 castro.point_mass              = 7.49143e6
 castro.point_mass_fix_solution = 0
 
-# robustness for the strong point-mass infall + absorbing sink
 castro.use_retry                  = 1   # retry a step with smaller dt on a failure
 castro.limit_fluxes_on_small_dens = 1   # stop hydro fluxes driving cells negative
-
-# ---- EOS (eos_gamma MUST match problem.gamma_gas below) ----
 eos.eos_gamma          = 1.3333333333
 eos.eos_assume_neutral = 1
 
 # ---- floors ----
-# This is a dimensionless gamma-law setup, so the *physical* temperature the
-# EOS derives is tiny (~1e-10); small_temp must sit well below it.  small_dens
-# also enforces the "absorbing" (near-vacuum) state inside the sink.
+# This is a dimensionless gamma-law setup to enforce the "absorbing" (near-vacuum) state inside the sink
 castro.small_dens = 1.e-10
 castro.small_pres = 1.e-16
 castro.small_temp = 1.e-20
-
-# Single passive species: the sharp sink can transiently perturb X near the
-# accretor; disable the strict abundance abort so normalize_species simply
-# renormalizes X -> 1 (which is always correct here).
 castro.abundance_failure_rho_cutoff = 1.e30
 
 # ---- problem parameters ----
@@ -102,8 +93,7 @@ amr.plot_int         = 200
 amr.derive_plot_vars = density xmom ymom zmom eden Temp pressure
 
 # ============================================================================
-#  PRODUCTION (Blondin & Pope model A: Rs = 0.037 Ra, flip-flop instability)
-#  Uncomment and tune.  The sink MUST stay on the finest level, so combine a
+# The sink MUST stay on the finest level, so combine a
 #  density-gradient indicator with a fixed refinement region at the accretor.
 # ----------------------------------------------------------------------------
 # problem.Rs_frac = 0.037
