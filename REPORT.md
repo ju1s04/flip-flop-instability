@@ -14,17 +14,25 @@ Mach number `ℳ = V∞/c∞`) flows past a gravitating point mass `M`. Gravity
 focuses the flow into a bow shock and a downstream accretion wake/column. The
 characteristic scale is the **Hoyle–Lyttleton accretion radius**
 
-```
-Ra = 2 G M / V∞²                                   (Hoyle & Lyttleton 1939)
-```
+$$
+R_a = \frac{2GM}{V_\infty^2}
+$$
 
 the impact parameter inside which incoming gas is captured. The analytic
 accretion rates are
 
-```
-Ṁ_HL = π Ra² ρ∞ V∞           (3-D / cylindrical, Hoyle & Lyttleton 1939)
-Ṁ_2D = 2  Ra  ρ∞ V∞          (2-D planar, Blondin & Pope 2009, eq. 8)
-```
+$$
+\dot{M}_{\mathrm{HL}} = \pi R_a^2 \rho_\infty V_\infty
+$$
+
+(3-D / cylindrical, Hoyle & Lyttleton 1939)
+
+$$
+\dot{M}_{\mathrm{2D}} = 2 R_a \rho_\infty V_\infty
+$$
+
+(2-D planar, Blondin & Pope 2009, Eq. 8)
+
 
 In 2-D planar geometry the accretion wake is subject to the **flip-flop
 instability** (Fryxell & Taam 1988): the wake swings from side to side with an
@@ -33,9 +41,9 @@ accretion disks. Blondin & Pope (2009) characterise this as a true *overstabilit
 and fit the accreted specific angular momentum `j(t)` with an exponentially
 growing sinusoid,
 
-```
-j(t) = j0 · exp(ω_r t) · cos(ω_i t)                (their eq. 9)
-```
+$$
+j(t) = j_0 \cdot e^{\omega_r t} \cdot \cos(\omega_i t)
+$$
 
 extracting a growth rate `ω_r` and oscillation frequency `ω_i`. Their **Model A**
 (the canonical case) gives `ω_r = 0.070`, `ω_i = 0.68`, period `2π/ω_i = 9.2 ≈
