@@ -1,4 +1,4 @@
-# Bondi–Hoyle–Lyttleton Accretion in Castro — Technical Report
+# Bondi–Hoyle–Lyttleton Accretion in Castro
 
 **Problem directory:** `Castro-main/Exec/science/bhl_accretion/`
 **Goal:** implement 2-D Bondi–Hoyle–Lyttleton (BHL) / Hoyle–Lyttleton (HL) wind accretion
