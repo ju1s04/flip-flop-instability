@@ -154,65 +154,6 @@ at `0.5/dt`. It is enabled by `castro.add_ext_src = 1`. **It is currently disabl
 (see §6). Mirroring Blondin & Pope, the intended fix is a *hard reset* of the
 absorbed region rather than a fractional drain (§8).
 
-### 3.5 AMR strategy
-
-Castro has no box-based refinement in the inputs file, so `problem_tagging.H`
-tags cells by **distance from the accretor**, with a radius that **halves per
-level** (nested refinement):
-
-```
-r_lim(level) = refine_radius / 2^level
-```
-
-With `refine_radius = 3`: level 1 covers `r < 3 Ra`, level 2 `r < 1.5 Ra`, level 3
-`r < 0.75 Ra`, concentrating the finest cells tightly on the accretor. This both
-resolves the accretion flow and keeps the finest level affordable.
-
-### 3.6 Provenance of key design choices (where each choice came from)
-
-For reproducibility, this records *why* the two least-obvious choices — the
-gravity treatment and the boundary conditions — were made, and their sources.
-
-**Gravity = native point-mass (`use_point_mass`).** Three sources, in order:
-
-1. *Physics — why a point mass at all:* **Blondin & Pope (2009), §2**, which
-   states the model uses *"a point source of gravity at the coordinate origin."*
-   BHL accretion is onto an external compact object with negligible gas
-   self-gravity, so a point mass (not Poisson self-gravity) is the correct model.
-2. *Implementation — the exact Castro config:* copied from Castro's own
-   point-mass accretion test, **`Exec/hydro_tests/rotating_torus/inputs_3d`**,
-   which uses `gravity.gravity_type = ConstantGrav`, `const_grav = 0.0`,
-   `use_point_mass = 1`. This choice was reached *after* an initial attempt to
-   apply softened gravity through `problem_source.H` (a generic `ext_src`) crashed
-   at the bow shock (§6, item 5); searching for Castro's own working accretion
-   setup led to `rotating_torus`.
-3. *Units — the value `point_mass = 7.49143×10⁶`:* read directly from the kernel
-   **`Source/gravity/Gravity.cpp`** (~line 3028),
-   `radial_force = -C::Gconst * castro::point_mass / rsq`, with
-   `Gconst = 6.67428×10⁻⁸` (CGS, hard-coded). Setting `point_mass = GM/Gconst`
-   with `GM = 0.5` gives the intended dimensionless field.
-
-> Note: Castro *does* have a full Poisson self-gravity solver (`PoissonGrav`,
-> multigrid/Hypre) and a `MonopoleGrav` approximation. They are deliberately
-> **not** used here — self-gravity of the accreting gas is negligible in BHL and
-> is not part of the HL model, and it would add the expensive `solve_for_phi`
-> Poisson kernel for no physical benefit.
-
-**Boundary conditions (XLO inflow, others outflow).** Also three sources:
-
-1. *Physics:* wind-past-an-object flow ⇒ Dirichlet inflow upstream, zero-gradient
-   outflow downstream and transverse. Same logic as Blondin & Pope (inflow at the
-   upstream/outer boundary, outflow downstream), on a Cartesian grid.
-2. *Castro conventions:* the BC integer codes
-   (`0=Interior, 1=Inflow, 2=Outflow, 3=Symmetry, 4=SlipWall`) and the
-   custom-inflow mechanism were taken from existing problems —
-   `hydro_tests/RT/inputs_2d` (codes) and `hydro_tests/double_mach_reflection`
-   (the spatially-varying `problem_bc_fill.H` template).
-3. *A constraint learned from a crash:* attempting two Inflow faces meeting at a
-   corner aborted with *"external boundaries meeting at a corner not supported,"*
-   which is why only the upstream face is Inflow. A pure-wind isolation run
-   (gravity + sink off) then confirmed the BCs were correct and that the earlier
-   crash was the gravity source, not the boundaries.
 
 ---
 
@@ -229,10 +170,10 @@ homebrew GCC 15). Native point-mass gravity, **sink disabled**.
 
 **Physics captured (qualitative):** the uniform Mach-4 wind develops a bow shock,
 a gravitationally-focused dense accretion structure, and a downstream wake. By
-`t ≈ 1.2–1.8` the wake is **asymmetric** and shows a rotating spiral/vortex — the
+`t ≈ 1.2–1.8` the wake is **asymmetric** and shows a rotating spiral/vortex; the
 **onset of the flip-flop instability** (transient rotating accretion structure).
 Peak density reaches ~30–77× ambient at the accretor (the pile-up is expected
-because the sink is off — nothing removes the accreted gas).
+because the sink is off, nothing removes the accreted gas).
 
 **Figures**
 - `bhl_density.png` — uniform-grid time series (`t = 0.19, 0.60, 1.20, 1.63`).
@@ -281,23 +222,6 @@ r–z) and `SPHERICAL` (axisymmetric r–θ). Blondin & Pope use **planar polar
 (r,φ)**, which Castro does not have, and which would require adding a coordinate
 type to AMReX plus polar geometric source terms throughout Castro's hydro; a codebase development still under work. 
 
-
----
-
-## 7. Current status, limitations, and roadmap to Model A
-
-**Working now:** build (local MPI), initialisation, boundary conditions, native
-point-mass gravity, AMR (nested tagging, ≥3 levels), plotting, all stable, and
-the flip-flop *onset* is visible.
-
-**Not yet done:** any *quantitative* Blondin & Pope result. The two gating pieces:
-
-1. **A robust absorbing accretor.** Replace the fractional-drain sink with a
-   **hard reset** inside `R_core` (pin `ρ, v, p` to fixed absorbed values every
-   step.
-2. **The `j(t)` diagnostic**, accreted specific angular momentum, normalised to
-   `Rs Vc = √(GM Rs)` — to fit `ω_r`.
-
 ---
 
 ## References
@@ -327,8 +251,4 @@ the flip-flop *onset* is visible.
   ApJ 715, 1221.
 - Zhang, W., et al. 2019, *AMReX*, J. Open Source Softw. 4, 1370.
 
----
 
-*Report generated for the `bhl_accretion` Castro problem. Figures: `bhl_density.png`,
-`bhl_amr.png`, `bhl_zoom.png`. Post-processing: `plot_bhl.py`, `plot_amr.py`,
-`plot_zoom.py`.*
