@@ -76,10 +76,9 @@ We work in **dimensionless units** with `ρ∞ = 1`, `V∞ = 1`, and `Ra = 1`
 - **Accretor (sink) radius:** `Rs = Rs_frac × Ra`, with `Rs_frac = 0.25`
   → **`Rs = 0.25 Ra`** in the current default.
 - **Blondin & Pope Model A uses `Rs = 0.037 Ra`** (a *small* accretor). Reaching
-  that value is the outstanding task (see §8): it requires both a working
-  absorbing sink and `dx ≪ 0.037 Ra` (≈ 4–5 AMR levels).
-- **Important:** all figures produced so far were run with the **sink disabled**
-  (`castro.add_ext_src = 0`). In those runs there is *no resolved accretor
+  that value is the outstanding task, it requires both a working
+  absorbing sink and `dx ≪ 0.037 Ra` (approx. 4–5 AMR levels).
+- **Important:** all figures produced so far were run with the **sink disabled**. In those runs there is *no resolved accretor
   surface*,  only the gravitating point at the domain centre. The black marker in
   the zoom figure is the point-mass location, not a resolved sink.
 
