@@ -1,12 +1,13 @@
 # Bondi–Hoyle–Lyttleton Accretion with Castro (AMR)
 
 2D simulations of **Bondi–Hoyle–Lyttleton (BHL) accretion**, where a supersonic
-wind flows past a gravitating point mass. They use the
+wind flows past a gravitating point mass. Using the
 [Castro](https://github.com/AMReX-Astro/Castro) adaptive-mesh-refinement
 hydrodynamics code. The goal is to reproduce the **2D "flip-flop" instability**
 of the accretion wake from
 [Blondin & Pope (2009)](https://arxiv.org/abs/0905.2769), this time on a
-**Cartesian AMR grid** instead of their polar grid.
+**Cartesian AMR grid** instead of their polar grid. Currently working on 
+the conversion from cartesian to polar coordinates. 
 
 ![BHL accretion, finest AMR level, with velocity streamlines](bhl_zoom.png)
 
@@ -20,7 +21,7 @@ asymmetric rotating wake, which is the onset of the flip-flop instability.*
 ## Highlights
 
 - A self-contained Castro problem setup. **No core Castro source is modified.**
-  Everything uses Castro's existing problem hooks.
+  Built entirely as a Castro problem directory. Castro's core source code is left untouched.
 - A Mach-4 wind (γ = 4/3) with native point-mass gravity, evolved stably on
   **3 levels of AMR** with refinement based on distance from the accretor.
 - Python (yt + matplotlib) scripts that extract the finest-level data and plot
