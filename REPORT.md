@@ -95,7 +95,7 @@ source was modified**. Files:
 | File | Role |
 |---|---|
 | `GNUmakefile` | `DIM=2`, `USE_MPI=TRUE`, `USE_GRAV=TRUE`, `USE_REACT=FALSE`, `EOS_DIR=gamma_law`, `NETWORK_DIR=general_null` (single passive species) |
-| `_prob_params` | runtime parameters (see §2) |
+| `_prob_params` | runtime parameters |
 | `problem_initialize.H` | sets `problem::center` to the domain centre; derives `Ra`, `Rs`, `c∞`, `p∞`, `ρe∞`, `T∞` |
 | `problem_initialize_state_data.H` | **initial condition**: uniform Mach-4 wind everywhere |
 | `problem_bc_fill.H` | **custom inflow BC**: imposes the uniform wind on the XLO face |
