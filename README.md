@@ -3,9 +3,9 @@
 2D simulations of **Bondi–Hoyle–Lyttleton (BHL) accretion**, where a supersonic
 wind flows past a gravitating point mass. Using the
 [Castro](https://github.com/AMReX-Astro/Castro) adaptive-mesh-refinement
-hydrodynamics code. The goal is to reproduce the **2D "flip-flop" instability**
+hydrodynamics code. I worked on attempting to reproduce the **2D "flip-flop" instability**
 of the accretion wake from
-[Blondin & Pope (2009)](https://arxiv.org/abs/0905.2769), this time on a
+[Blondin & Pope (2009)](https://arxiv.org/abs/0905.2769), so it could be incorporated on CASTRO. But this time on a
 **Cartesian AMR grid** instead of their polar grid. Currently working on 
 the conversion from cartesian to polar coordinates. 
 
@@ -107,7 +107,7 @@ python plot_bhl.py       # -> bhl_density.png (time series)
       asymmetric wake
 - [ ] Absorbing sink: measure the accretion rate (target Ṁ ≈ 0.9 · 2RaρV)
 - [ ] Longer runs: fit the flip-flop growth rate against Blondin & Pope
-      model A (ω_r ≈ 0.070)
+      model A (ω_r = 0.070)
 - [ ] Parameter study over Mach number, γ and accretor size
 
 ## References
