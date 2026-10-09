@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Tight zoom on the accretor at the finest AMR level, with streamlines."""
+"""Tight zoom on the accretor at the finest AMR level with streamlines."""
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -7,7 +7,7 @@ import numpy as np
 import yt
 yt.set_log_level(50)
 
-FN = "plt00300"           # most-evolved frame
+FN = "plt00300"           
 X0, X1 = 5.0, 7.0         # tighter zoom box (Ra), accretor at (6,0)
 Y0, Y1 = -1.0, 1.0
 
@@ -17,7 +17,7 @@ dxf = ds.domain_width.d[0] / (ds.domain_dimensions[0] * ds.refine_by**lev)
 nx = int(round((X1 - X0) / dxf))
 ny = int(round((Y1 - Y0) / dxf))
 
-# covering grid over ONLY the zoom box, at the finest level -> full L2 detail
+# covering grid over ONLY the zoom 
 le = [X0, Y0, float(ds.domain_left_edge.d[2])]
 cg = ds.covering_grid(level=lev, left_edge=le, dims=[nx, ny, 1])
 rho = np.array(cg["density"][:, :, 0]).T
@@ -40,5 +40,4 @@ ax.set_title(f"BHL accretion, finest level (dx={dxf:.4f} Ra), "
              f"t = {float(ds.current_time):.2f} Ra/V")
 plt.colorbar(im, ax=ax, shrink=0.85, label=r"$\log_{10}\rho$")
 fig.savefig("bhl_zoom.png", dpi=140)
-print(f"wrote bhl_zoom.png  ({nx}x{ny} at level {lev}, dx={dxf:.4f})")
-print(f"zoom rho range: [{rho.min():.3f}, {rho.max():.3f}]")
+
